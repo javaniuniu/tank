@@ -10,8 +10,8 @@ public class Bullet {
     private int x,y;
     private Dir dir;
     private static final int SPEED = 5;
-    private static final int WIDTH = 20;
-    private static final int HEIGHT = 20;
+    public static final int WIDTH = ResourceMgr.bulletD.getWidth();
+    public static final int HEIGHT = ResourceMgr.bulletD.getHeight();
 
     private boolean living = true; // 子弹是否还在窗口
 
@@ -29,12 +29,22 @@ public class Bullet {
             tf.bullets.remove(this);
         }
 
-
-
-        Color c = g.getColor();
-        g.setColor(Color.RED);
-        g.fillRect(x, y, WIDTH, HEIGHT);
-        g.setColor(c);
+        switch (dir) {
+            case LEFT:
+                g.drawImage(ResourceMgr.bulletL,x,y,null);
+                break;
+            case UP:
+                g.drawImage(ResourceMgr.bulletU,x,y,null);
+                break;
+            case RIGHT:
+                g.drawImage(ResourceMgr.bulletR,x,y,null);
+                break;
+            case DOWN:
+                g.drawImage(ResourceMgr.bulletD,x,y,null);
+                break;
+            default:
+                break;
+        }
         move();
     }
 

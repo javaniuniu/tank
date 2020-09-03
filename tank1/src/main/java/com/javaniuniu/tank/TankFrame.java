@@ -58,7 +58,6 @@ public class TankFrame extends Frame {
 
 
         myTank.paint(g);
-        badTank.badpaint(g);
 
 
         for (int i = 0; i < bullets.size(); i++) {

@@ -11,6 +11,8 @@ public class Tank {
     private int x, y; // 坦克的在画板的位置
     private Dir dir = Dir.DOWN; // 坦克默认想想移动
     private static final int SPEED = 5; // 坦克移动的单位
+    public static final int WIDTH = ResourceMgr.tankD.getWidth();
+    public static final int HEIGHT = ResourceMgr.tankD.getHeight();
 
     private boolean moving = false; // 坦克是否移动
 
@@ -49,16 +51,16 @@ public class Tank {
 //        g.setColor(c);
         switch (dir) {
             case LEFT:
-                g.drawImage(ResourceMgr.tankL,x,y,null);
+                g.drawImage(ResourceMgr.tankL, x, y, null);
                 break;
             case UP:
-                g.drawImage(ResourceMgr.tankU,x,y,null);
+                g.drawImage(ResourceMgr.tankU, x, y, null);
                 break;
             case RIGHT:
-                g.drawImage(ResourceMgr.tankR,x,y,null);
+                g.drawImage(ResourceMgr.tankR, x, y, null);
                 break;
             case DOWN:
-                g.drawImage(ResourceMgr.tankD,x,y,null);
+                g.drawImage(ResourceMgr.tankD, x, y, null);
                 break;
             default:
                 break;
@@ -66,24 +68,6 @@ public class Tank {
 
         move();
     }
-
-    public void badpaint(Graphics g) {
-
-
-
-        if (living) {
-            Color c = g.getColor();
-            g.setColor(Color.BLUE);
-            g.fillRect(x, y, 50, 50);
-            g.setColor(c);
-        }else {
-            System.out.println("击毁敌军坦克");
-        }
-    }
-
-
-
-
 
 
     private void move() {
@@ -107,7 +91,9 @@ public class Tank {
     }
 
     public void fire() {
-        tf.bullets.add(new Bullet(this.x, this.y, this.dir,this.tf));
+        int bx = this.x + Tank.WIDTH / 2 - Bullet.WIDTH / 2;
+        int by = this.y + Tank.HEIGHT / 2 - Bullet.HEIGHT / 2;
+        tf.bullets.add(new Bullet(bx, by, this.dir, this.tf));
 
     }
 }
