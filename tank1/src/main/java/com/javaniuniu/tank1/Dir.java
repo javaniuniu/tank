@@ -1,4 +1,4 @@
-package com.javaniuniu.tank;
+package com.javaniuniu.tank1;
 
 /**
  * @auther: javaniuniu
@@ -6,5 +6,5 @@ package com.javaniuniu.tank;
  */
 // 方向
 public enum Dir {
-    LEFT,UP,RIGHT,DOWN;
+    LEFT, UP, RIGHT, DOWN
 }

@@ -1,4 +1,4 @@
-package com.javaniuniu.tank;
+package com.javaniuniu.tank1;
 
 import java.awt.*;
 import java.util.Random;
@@ -86,18 +86,18 @@ public class Tank {
 
         if (!living) tf.tanks.remove(this);
 
-        switch(dir) {
+        switch (dir) {
             case LEFT:
-                g.drawImage(this.group == Group.GOOD? ResourceMgr.goodTankL : ResourceMgr.badTankL, x, y, null);
+                g.drawImage(this.group == Group.GOOD ? ResourceMgr.goodTankL : ResourceMgr.badTankL, x, y, null);
                 break;
             case UP:
-                g.drawImage(this.group == Group.GOOD? ResourceMgr.goodTankU : ResourceMgr.badTankU, x, y, null);
+                g.drawImage(this.group == Group.GOOD ? ResourceMgr.goodTankU : ResourceMgr.badTankU, x, y, null);
                 break;
             case RIGHT:
-                g.drawImage(this.group == Group.GOOD? ResourceMgr.goodTankR : ResourceMgr.badTankR, x, y, null);
+                g.drawImage(this.group == Group.GOOD ? ResourceMgr.goodTankR : ResourceMgr.badTankR, x, y, null);
                 break;
             case DOWN:
-                g.drawImage(this.group == Group.GOOD? ResourceMgr.goodTankD : ResourceMgr.badTankD, x, y, null);
+                g.drawImage(this.group == Group.GOOD ? ResourceMgr.goodTankD : ResourceMgr.badTankD, x, y, null);
                 break;
             default:
                 break;
@@ -126,12 +126,11 @@ public class Tank {
         }
 
 
-
         // 随机发子弹
-        if (this.group==Group.BAD&& random.nextInt(100)>95) this.fire();
+        if (this.group == Group.BAD && random.nextInt(100) > 95) this.fire();
 
         // 随机移动
-        if (this.group == Group.BAD&& random.nextInt(100)>95) {
+        if (this.group == Group.BAD && random.nextInt(100) > 95) {
             randomDir();
         }
 
@@ -148,8 +147,8 @@ public class Tank {
     private void boundsCheck() {
         if (this.x < 2) x = 2;
         if (this.y < 28) y = 28;
-        if (this.x > TankFrame.GAME_WIDTH- Tank.WIDTH -2) x = TankFrame.GAME_WIDTH - Tank.WIDTH -2;
-        if (this.y > TankFrame.GAME_HEIGHT - Tank.HEIGHT -2 ) y = TankFrame.GAME_HEIGHT -Tank.HEIGHT -2;
+        if (this.x > TankFrame.GAME_WIDTH - Tank.WIDTH - 2) x = TankFrame.GAME_WIDTH - Tank.WIDTH - 2;
+        if (this.y > TankFrame.GAME_HEIGHT - Tank.HEIGHT - 2) y = TankFrame.GAME_HEIGHT - Tank.HEIGHT - 2;
 
     }
 
@@ -160,7 +159,7 @@ public class Tank {
     public void fire() {
         int bx = this.x + Tank.WIDTH / 2 - Bullet.WIDTH / 2;
         int by = this.y + Tank.HEIGHT / 2 - Bullet.HEIGHT / 2;
-        tf.bullets.add(new Bullet(bx, by, this.dir,this.group, this.tf));
+        tf.bullets.add(new Bullet(bx, by, this.dir, this.group, this.tf));
 
     }
 

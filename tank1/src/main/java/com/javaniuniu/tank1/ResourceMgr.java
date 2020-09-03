@@ -1,4 +1,4 @@
-package com.javaniuniu.tank;
+package com.javaniuniu.tank1;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -33,8 +33,8 @@ public class ResourceMgr {
             bulletR = ImageUtil.rotateImage(bulletU, 90);
             bulletD = ImageUtil.rotateImage(bulletU, 180);
 
-            for(int i=0; i<16; i++)
-                explodes[i] = ImageIO.read(ResourceMgr.class.getClassLoader().getResourceAsStream("./images/e" + (i+1) + ".gif"));
+            for (int i = 0; i < 16; i++)
+                explodes[i] = ImageIO.read(ResourceMgr.class.getClassLoader().getResourceAsStream("./images/e" + (i + 1) + ".gif"));
         } catch (IOException e) {
             e.printStackTrace();
         }
