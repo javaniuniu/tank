@@ -12,8 +12,8 @@ public class Tank {
     private int x, y; // 坦克的在画板的位置
     private Dir dir = Dir.DOWN; // 坦克默认想想移动
     private static final int SPEED = 1; // 坦克移动的单位
-    public static final int WIDTH = ResourceMgr.goodTankL.getWidth();
-    public static final int HEIGHT = ResourceMgr.goodTankL.getHeight();
+    public static final int WIDTH = ResourceMgr.goodTankU.getWidth();
+    public static final int HEIGHT = ResourceMgr.goodTankU.getHeight();
 
     private TankFrame tf = null;
     private boolean moving = true; // 坦克默认是否移动
@@ -79,24 +79,22 @@ public class Tank {
 
         if (!living) tf.tanks.remove(this);
 
-        switch (dir) {
+        switch(dir) {
             case LEFT:
-                g.drawImage(ResourceMgr.goodTankL, x, y, null);
+                g.drawImage(this.group == Group.GOOD? ResourceMgr.goodTankL : ResourceMgr.badTankL, x, y, null);
                 break;
             case UP:
-                g.drawImage(ResourceMgr.goodTankU, x, y, null);
+                g.drawImage(this.group == Group.GOOD? ResourceMgr.goodTankU : ResourceMgr.badTankU, x, y, null);
                 break;
             case RIGHT:
-                g.drawImage(ResourceMgr.goodTankR, x, y, null);
+                g.drawImage(this.group == Group.GOOD? ResourceMgr.goodTankR : ResourceMgr.badTankR, x, y, null);
                 break;
             case DOWN:
-                g.drawImage(ResourceMgr.goodTankD, x, y, null);
+                g.drawImage(this.group == Group.GOOD? ResourceMgr.goodTankD : ResourceMgr.badTankD, x, y, null);
                 break;
             default:
                 break;
         }
-
-
         move();
     }
 

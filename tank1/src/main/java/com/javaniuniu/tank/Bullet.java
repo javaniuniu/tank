@@ -11,8 +11,8 @@ public class Bullet {
     private int x,y;
     private Dir dir;
     private static final int SPEED = 10;
-    public static final int WIDTH = ResourceMgr.bulletD.getWidth();
-    public static final int HEIGHT = ResourceMgr.bulletD.getHeight();
+    public static final int WIDTH = ResourceMgr.bulletU.getWidth();
+    public static final int HEIGHT = ResourceMgr.bulletU.getHeight();
 
     private boolean living = true; // 子弹是否还在窗口
 
@@ -92,7 +92,9 @@ public class Bullet {
         if (rect1.intersects(rect2)) {
             tank.die();
             this.die();
-            tf.explodes.add(new Explode(this.x,this.y,this.tf));
+            int ex = tank.getX() + Tank.WIDTH / 2 - Explode.WIDTH / 2;
+            int ey = tank.getY() + Tank.HEIGHT / 2 - Explode.HEIGHT / 2;
+            tf.explodes.add(new Explode(ex,ey,tf));
         }
     }
 
