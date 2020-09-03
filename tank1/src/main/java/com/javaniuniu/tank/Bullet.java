@@ -1,6 +1,7 @@
 package com.javaniuniu.tank;
 
 import java.awt.*;
+import java.util.HashMap;
 
 /**
  * @auther: javaniuniu
@@ -9,7 +10,7 @@ import java.awt.*;
 public class Bullet {
     private int x,y;
     private Dir dir;
-    private static final int SPEED = 5;
+    private static final int SPEED = 10;
     public static final int WIDTH = ResourceMgr.bulletD.getWidth();
     public static final int HEIGHT = ResourceMgr.bulletD.getHeight();
 
@@ -68,5 +69,19 @@ public class Bullet {
 
         if(x < 0 || y < 0 || x > TankFrame.GAME_WIDTH || y > TankFrame.GAME_HEIGHT) living = false;
 
+    }
+
+    // 碰撞测试
+    public void collideWith(Tank tank) {
+        Rectangle rect1 = new Rectangle(this.x,this.y,WIDTH, HEIGHT);
+        Rectangle rect2 = new Rectangle(tank.getX(),tank.getY(),Tank.WIDTH,Tank. HEIGHT);
+        if (rect1.intersects(rect2)) {
+            tank.die();
+            this.die();
+        }
+    }
+
+    private void die() {
+        this.living = false;
     }
 }
