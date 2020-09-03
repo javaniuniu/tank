@@ -6,12 +6,13 @@ import java.awt.*;
  * @auther: javaniuniu
  * @date: 2020/9/3 7:43 PM
  */
+// 爆炸效果
 public class Explode {
     private int x,y;
     public static final int WIDTH = ResourceMgr.explodes[0].getWidth();
     public static final int HEIGHT = ResourceMgr.explodes[0].getHeight();
 
-    private boolean living = true; // 爆炸图片是否还在窗口
+//    private boolean living = true; // 爆炸图片是否还在窗口
 
     private TankFrame tf = null;
 
@@ -22,14 +23,17 @@ public class Explode {
         this.x = x;
         this.y = y;
         this.tf = tf;
-        new Audio("./audio/war1.wav").loop();
+        new Thread(()->{
+            new Audio("./audio/explode.wav").play();
+        }).start();
 
     }
 
     public void paint(Graphics g) {
         g.drawImage(ResourceMgr.explodes[step++],x,y,null);
         if (step>=ResourceMgr.explodes.length)
-            step = 0;
+//            step = 0;
+            tf.explodes.remove(this);
     }
 
 
