@@ -10,8 +10,8 @@ public class Bullet {
     private int x,y;
     private Dir dir;
     private static final int SPEED = 10;
-    private static final int WIDTH = 5;
-    private static final int HEIGHT = 5;
+    private static final int WIDTH = 20;
+    private static final int HEIGHT = 20;
 
     public Bullet(int x, int y, Dir dir) {
         this.x = x;
