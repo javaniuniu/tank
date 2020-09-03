@@ -22,6 +22,8 @@ public class Tank {
     private Random random = new Random();
     private Group group = Group.BAD;
 
+    Rectangle rect = new Rectangle();
+
 
     public Group getGroup() {
         return group;
@@ -37,6 +39,11 @@ public class Tank {
         this.dir = dir;
         this.group = group;
         this.tf = tf;
+
+        rect.x = this.x;
+        rect.y = this.y;
+        rect.width = WIDTH;
+        rect.height = HEIGHT;
     }
 
     public Dir getDir() {
@@ -118,14 +125,22 @@ public class Tank {
                 break;
         }
 
+
+
+        // 随机发子弹
         if (this.group==Group.BAD&& random.nextInt(100)>95) this.fire();
 
+        // 随机移动
         if (this.group == Group.BAD&& random.nextInt(100)>95) {
             randomDir();
         }
 
 
         boundsCheck();
+
+        // update rect
+        rect.x = this.x;
+        rect.y = this.y;
 
     }
 
