@@ -10,7 +10,7 @@ import java.awt.*;
 public class Tank {
     private int x,y; // 坦克的在画板的位置
     private Dir dir = Dir.DOWN; // 坦克默认想想移动
-    private static final int SPEED = 10; // 坦克移动的单位
+    private static final int SPEED = 5; // 坦克移动的单位
 
     private boolean moving = false; // 坦克是否移动
 
