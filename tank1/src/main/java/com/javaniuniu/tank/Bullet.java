@@ -29,6 +29,8 @@ public class Bullet {
             tf.bullets.remove(this);
         }
 
+
+
         Color c = g.getColor();
         g.setColor(Color.RED);
         g.fillRect(x, y, WIDTH, HEIGHT);
