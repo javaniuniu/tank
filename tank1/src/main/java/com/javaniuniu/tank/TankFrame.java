@@ -13,7 +13,7 @@ import java.awt.event.WindowEvent;
 // 画板
 public class TankFrame extends Frame {
 
-    Tank myTank = new Tank(200,200,Dir.DOWN);
+    Tank myTank = new Tank(200, 200, Dir.DOWN);
 //    int x = 200, y = 200;
 //
 //    Dir dir = Dir.DOWN;
@@ -54,7 +54,7 @@ public class TankFrame extends Frame {
         public void keyPressed(KeyEvent e) {
 //            x +=200;
             int key = e.getKeyCode();
-            switch (key){
+            switch (key) {
                 case KeyEvent.VK_LEFT:
                     bL = true;
                     break;
@@ -70,14 +70,14 @@ public class TankFrame extends Frame {
                 default:
                     break;
             }
-            
+
             setMainTankDir();
         }
 
         @Override
         public void keyReleased(KeyEvent e) {
             int key = e.getKeyCode();
-            switch (key){
+            switch (key) {
                 case KeyEvent.VK_LEFT:
                     bL = false;
                     break;
@@ -97,10 +97,15 @@ public class TankFrame extends Frame {
         }
 
         private void setMainTankDir() {
-            if(bL) myTank.setDir(Dir.LEFT);
-            if(bR) myTank.setDir(Dir.RIGHT);
-            if(bU) myTank.setDir(Dir.UP);
-            if(bD) myTank.setDir(Dir.DOWN);
+            if (!bL && !bR && !bU && !bD) myTank.setMoving(false);
+            else {
+                myTank.setMoving(true);
+                if (bL) myTank.setDir(Dir.LEFT);
+                if (bR) myTank.setDir(Dir.RIGHT);
+                if (bU) myTank.setDir(Dir.UP);
+                if (bD) myTank.setDir(Dir.DOWN);
+            }
+
         }
     }
 
