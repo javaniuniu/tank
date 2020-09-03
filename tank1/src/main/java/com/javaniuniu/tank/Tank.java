@@ -1,6 +1,7 @@
 package com.javaniuniu.tank;
 
 import java.awt.*;
+import java.util.Random;
 
 /**
  * @auther: javaniuniu
@@ -10,21 +11,31 @@ import java.awt.*;
 public class Tank {
     private int x, y; // 坦克的在画板的位置
     private Dir dir = Dir.DOWN; // 坦克默认想想移动
-    private static final int SPEED = 5; // 坦克移动的单位
+    private static final int SPEED = 1; // 坦克移动的单位
     public static final int WIDTH = ResourceMgr.tankD.getWidth();
     public static final int HEIGHT = ResourceMgr.tankD.getHeight();
 
-    private boolean moving = false; // 坦克是否移动
-
     private TankFrame tf = null;
-
+    private boolean moving = true; // 坦克默认是否移动
     private boolean living = true; // 坦克是否存活
 
+    private Random random = new Random();
+    private Group group = Group.BAD;
 
-    public Tank(int x, int y, Dir dir, TankFrame tf) {
+
+    public Group getGroup() {
+        return group;
+    }
+
+    public void setGroup(Group group) {
+        this.group = group;
+    }
+
+    public Tank(int x, int y, Dir dir, Group group, TankFrame tf) {
         this.x = x;
         this.y = y;
         this.dir = dir;
+        this.group = group;
         this.tf = tf;
     }
 
@@ -107,12 +118,14 @@ public class Tank {
             default:
                 break;
         }
+
+        if (random.nextInt(10)>8) this.fire();
     }
 
     public void fire() {
         int bx = this.x + Tank.WIDTH / 2 - Bullet.WIDTH / 2;
         int by = this.y + Tank.HEIGHT / 2 - Bullet.HEIGHT / 2;
-        tf.bullets.add(new Bullet(bx, by, this.dir, this.tf));
+        tf.bullets.add(new Bullet(bx, by, this.dir,this.group, this.tf));
 
     }
 
