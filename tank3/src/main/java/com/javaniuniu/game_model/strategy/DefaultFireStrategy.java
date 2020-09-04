@@ -1,4 +1,6 @@
-package com.javaniuniu.game_model;
+package com.javaniuniu.game_model.strategy;
+
+import com.javaniuniu.game_model.*;
 
 /**
  * @auther: javaniuniu

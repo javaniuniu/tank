@@ -1,7 +1,5 @@
 package com.javaniuniu.game_model;
 
-import com.javaniuniu.game_model.abstractfactory.BaseBullet;
-import com.javaniuniu.game_model.abstractfactory.BaseTank;
 
 import java.awt.*;
 
@@ -9,7 +7,7 @@ import java.awt.*;
  * @auther: javaniuniu
  * @date: 2020/9/3 7:43 PM
  */
-public class Bullet extends BaseBullet {
+public class Bullet extends GameObject {
     private int x,y;
     private Dir dir;
     private static final int SPEED = Integer.parseInt((String)PropertyMgr.get("bulletSpeed"));
@@ -44,13 +42,13 @@ public class Bullet extends BaseBullet {
         rect.width = WIDTH;
         rect.height = HEIGHT;
 
-        gm.bullets.add(this);
+        gm.add(this);
 
     }
 
     public void paint(Graphics g) {
         if (!living){
-            gm.bullets.remove(this);
+            gm.remove(this);
         }
 
         switch (dir) {
@@ -104,8 +102,8 @@ public class Bullet extends BaseBullet {
     }
 
     // 碰撞测试
-    public void collideWith(BaseTank tank) {
-        if(this.group == tank.getGroup()) return;
+    public boolean collideWith(Tank tank) {
+        if(this.group == tank.getGroup()) return false;
 
 
         // 用一个rect来记录子弹的位置
@@ -116,8 +114,10 @@ public class Bullet extends BaseBullet {
             this.die();
             int ex = tank.getX() + Tank.WIDTH / 2 - Explode.WIDTH / 2;
             int ey = tank.getY() + Tank.HEIGHT / 2 - Explode.HEIGHT / 2;
-            gm.explodes.add(gm.gf.createExplode(ex,ey,gm));
-        }
+            gm.add(new Explode(ex,ey,gm));
+            return true;
+        }else
+            return false;
     }
 
     private void die() {

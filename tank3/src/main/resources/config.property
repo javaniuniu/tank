@@ -5,5 +5,7 @@ bulletSpeed=10
 gameWidth=1080
 gameHeight=720
 #fireStrategy
-goodFS=com.javaniuniu.game_model.FourDirFireStrategy
-badFS=com.javaniuniu.game_model.DefaultFireStrategy
+goodFS=com.javaniuniu.game_model.strategy.FourDirFireStrategy
+badFS=com.javaniuniu.game_model.strategy.DefaultFireStrategy
+#colliders
+colliders=com.javaniuniu.game_model.cor.BulletTankCollider,com.javaniuniu.game_model.cor.TankTankCollider

@@ -1,6 +1,5 @@
 package com.javaniuniu.game_model;
 
-import com.javaniuniu.game_model.abstractfactory.BaseExplode;
 
 import java.awt.*;
 
@@ -9,7 +8,7 @@ import java.awt.*;
  * @date: 2020/9/3 7:43 PM
  */
 // 爆炸效果
-public class Explode extends BaseExplode {
+public class Explode extends GameObject {
     private int x,y;
     public static final int WIDTH = ResourceMgr.explodes[0].getWidth();
     public static final int HEIGHT = ResourceMgr.explodes[0].getHeight();
@@ -35,7 +34,7 @@ public class Explode extends BaseExplode {
         g.drawImage(ResourceMgr.explodes[step++],x,y,null);
         if (step>=ResourceMgr.explodes.length)
 //            step = 0;
-            gm.explodes.remove(this);
+            gm.remove(this);
     }
 
 
