@@ -1,5 +1,5 @@
 
-package com.javaniuniu.tank2;
+package com.javaniuniu.design_patterns;
 
 import javax.sound.sampled.*;
 import java.io.IOException;

@@ -1,4 +1,4 @@
-package com.javaniuniu.tank2;
+package com.javaniuniu.design_patterns;
 
 import java.awt.*;
 
@@ -9,7 +9,7 @@ import java.awt.*;
 public class Bullet {
     private int x,y;
     private Dir dir;
-    private static final int SPEED = 10;
+    private static final int SPEED = Integer.parseInt((String)PropertyMgr.get("bulletSpeed"));
     public static final int WIDTH = ResourceMgr.bulletU.getWidth();
     public static final int HEIGHT = ResourceMgr.bulletU.getHeight();
 
@@ -40,6 +40,9 @@ public class Bullet {
         rect.y = this.y;
         rect.width = WIDTH;
         rect.height = HEIGHT;
+
+        tf.bullets.add(this);
+
     }
 
     public void paint(Graphics g) {

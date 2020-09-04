@@ -1,6 +1,8 @@
-package com.javaniuniu.tank2;
+package com.javaniuniu.design_patterns;
 
 import java.awt.*;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Random;
 
 /**
@@ -9,20 +11,21 @@ import java.util.Random;
  */
 // 坦克类
 public class Tank {
-    private int x, y; // 坦克的在画板的位置
-    private Dir dir = Dir.DOWN; // 坦克默认想想移动
-    private static final int SPEED = 5; // 坦克移动的单位
+    int x, y; // 坦克的在画板的位置
+    Dir dir = Dir.DOWN; // 坦克默认想想移动
+    private static final int SPEED = Integer.parseInt((String)PropertyMgr.get("tankSpeed"));; // 坦克移动的单位
     public static final int WIDTH = ResourceMgr.goodTankU.getWidth();
     public static final int HEIGHT = ResourceMgr.goodTankU.getHeight();
 
-    private TankFrame tf = null;
+    TankFrame tf = null;
     private boolean moving = true; // 坦克默认是否移动
     private boolean living = true; // 坦克是否存活
 
     private Random random = new Random();
-    private Group group = Group.BAD;
+    Group group = Group.BAD;
 
     Rectangle rect = new Rectangle();
+    private  FireStrategy fs = null;
 
 
     public Group getGroup() {
@@ -44,6 +47,30 @@ public class Tank {
         rect.y = this.y;
         rect.width = WIDTH;
         rect.height = HEIGHT;
+
+
+
+        if(group==Group.GOOD){
+            try {
+                String goodFSName = (String) PropertyMgr.get("goodFS");
+                Constructor con = Class.forName(goodFSName).getDeclaredConstructor();
+                con.setAccessible(true);
+                fs = (FireStrategy) con.newInstance();
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+        else{
+            try {
+                String goodFSName = (String) PropertyMgr.get("badFS");
+                Constructor con = Class.forName(goodFSName).getDeclaredConstructor();
+                con.setAccessible(true);
+                fs = (FireStrategy) con.newInstance();
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+
     }
 
     public Dir getDir() {
@@ -128,7 +155,7 @@ public class Tank {
 
 
         // 随机发子弹
-        if (this.group==Group.BAD&& random.nextInt(100)>95) this.fire();
+        if (this.group==Group.BAD&& random.nextInt(100)>95) this.fire(fs);
 
         // 随机移动
         if (this.group == Group.BAD&& random.nextInt(100)>95) {
@@ -157,11 +184,8 @@ public class Tank {
         this.dir = Dir.values()[random.nextInt(4)];
     }
 
-    public void fire() {
-        int bx = this.x + Tank.WIDTH / 2 - Bullet.WIDTH / 2;
-        int by = this.y + Tank.HEIGHT / 2 - Bullet.HEIGHT / 2;
-        tf.bullets.add(new Bullet(bx, by, this.dir,this.group, this.tf));
-
+    public void fire(FireStrategy fs) {
+        fs.fire(this);
     }
 
     public void die() {

@@ -1,4 +1,4 @@
-package com.javaniuniu.tank2;
+package com.javaniuniu.design_patterns;
 
 import java.io.IOException;
 import java.util.Properties;
@@ -9,6 +9,9 @@ import java.util.Properties;
  */
 public class PropertyMgr {
     static Properties props = new Properties();
+
+    private PropertyMgr() {
+    }
 
     static {
         try {

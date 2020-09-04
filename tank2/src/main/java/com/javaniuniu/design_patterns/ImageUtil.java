@@ -1,4 +1,4 @@
-package com.javaniuniu.tank2;
+package com.javaniuniu.design_patterns;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
