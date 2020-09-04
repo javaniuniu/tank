@@ -15,7 +15,7 @@ import java.util.List;
  */
 // 画板
 public class TankFrame extends Frame {
-    public GameModel gm = new GameModel();
+    GameModel gm = GameModel.getInstance();
     public static final int GAME_WIDTH = Integer.parseInt((String) PropertyMgr.get("gameWidth"));
     public static final int GAME_HEIGHT = Integer.parseInt((String) PropertyMgr.get("gameHeight"));
 

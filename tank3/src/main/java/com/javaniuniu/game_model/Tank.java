@@ -26,13 +26,12 @@ public class Tank extends GameObject {
     public int oldX,oldY;// 坦克上一个位置
     public Dir dir = Dir.DOWN; // 坦克默认想想移动
 
-    Rectangle rect = new Rectangle();
+    public Rectangle rect = new Rectangle();
 
     public Group group;
 
     private boolean moving = true; // 坦克默认是否移动
     private boolean living = true; // 坦克是否存活
-    public GameModel gm;
 
     //    Rectangle rect = new Rectangle();
     FireStrategy fs;
@@ -42,12 +41,11 @@ public class Tank extends GameObject {
         return rect;
     }
 
-    public Tank(int x, int y, Dir dir, Group group, GameModel gm) {
+    public Tank(int x, int y, Dir dir, Group group) {
         this.x = x;
         this.y = y;
         this.dir = dir;
         this.group = group;
-        this.gm = gm;
 
         rect.x = this.x;
         rect.y = this.y;
@@ -66,6 +64,8 @@ public class Tank extends GameObject {
         } else {
             fs = new FourDirFireStrategy();
         }
+
+        GameModel.getInstance().add(this);
     }
 
     public void fire() {
@@ -89,7 +89,7 @@ public class Tank extends GameObject {
 //        g.fillRect(x, y, 50, 50);
 //        g.setColor(c);
 
-        if (!living) gm.remove(this);
+        if (!living) GameModel.getInstance().remove(this);
 
         switch (dir) {
             case LEFT:

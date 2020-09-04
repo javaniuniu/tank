@@ -15,18 +15,19 @@ public class Explode extends GameObject {
 
 //    private boolean living = true; // 爆炸图片是否还在窗口
 
-    private GameModel gm = null;
+//    private GameModel gm = null;
 
     private int step = 0; // 爆炸程度
 
 
-    public Explode(int x, int y,  GameModel gm) {
+    public Explode(int x, int y) {
         this.x = x;
         this.y = y;
-        this.gm = gm;
         new Thread(()->{
             new Audio("./audio/explode.wav").play();
         }).start();
+
+        GameModel.getInstance().add(this);
 
     }
 
@@ -34,7 +35,7 @@ public class Explode extends GameObject {
         g.drawImage(ResourceMgr.explodes[step++],x,y,null);
         if (step>=ResourceMgr.explodes.length)
 //            step = 0;
-            gm.remove(this);
+            GameModel.getInstance().remove(this);
     }
 
 

@@ -16,10 +16,9 @@ public class Bullet extends GameObject {
 
     private boolean living = true; // 子弹是否还在窗口
 
-    private GameModel gm = null;
-    private Group group = Group.BAD;
+    public Group group = Group.BAD;
 
-    Rectangle rect = new Rectangle();
+    public Rectangle rect = new Rectangle();
 
 
     public Group getGroup() {
@@ -30,25 +29,24 @@ public class Bullet extends GameObject {
         this.group = group;
     }
 
-    public Bullet(int x, int y, Dir dir, Group group, GameModel gm) {
+    public Bullet(int x, int y, Dir dir, Group group) {
         this.x = x;
         this.y = y;
         this.dir = dir;
         this.group = group;
-        this.gm = gm;
 
         rect.x = this.x;
         rect.y = this.y;
         rect.width = WIDTH;
         rect.height = HEIGHT;
 
-        gm.add(this);
+        GameModel.getInstance().add(this);
 
     }
 
     public void paint(Graphics g) {
         if (!living){
-            gm.remove(this);
+            GameModel.getInstance().remove(this);
         }
 
         switch (dir) {
@@ -101,26 +99,26 @@ public class Bullet extends GameObject {
 
     }
 
-    // 碰撞测试
-    public boolean collideWith(Tank tank) {
-        if(this.group == tank.getGroup()) return false;
+//    // 碰撞测试
+//    public boolean collideWith(Tank tank) {
+//        if(this.group == tank.getGroup()) return false;
+//
+//
+//        // 用一个rect来记录子弹的位置
+////        Rectangle rect1 = new Rectangle(this.x,this.y,WIDTH, HEIGHT);
+////        Rectangle rect2 = new Rectangle(tank.getX(),tank.getY(),Tank.WIDTH,Tank. HEIGHT);
+//        if (rect.intersects(tank.rect)){
+//            tank.die();
+//            this.die();
+//            int ex = tank.getX() + Tank.WIDTH / 2 - Explode.WIDTH / 2;
+//            int ey = tank.getY() + Tank.HEIGHT / 2 - Explode.HEIGHT / 2;
+//            gm.add(new Explode(ex,ey,gm));
+//            return true;
+//        }else
+//            return false;
+//    }
 
-
-        // 用一个rect来记录子弹的位置
-//        Rectangle rect1 = new Rectangle(this.x,this.y,WIDTH, HEIGHT);
-//        Rectangle rect2 = new Rectangle(tank.getX(),tank.getY(),Tank.WIDTH,Tank. HEIGHT);
-        if (rect.intersects(tank.rect)){
-            tank.die();
-            this.die();
-            int ex = tank.getX() + Tank.WIDTH / 2 - Explode.WIDTH / 2;
-            int ey = tank.getY() + Tank.HEIGHT / 2 - Explode.HEIGHT / 2;
-            gm.add(new Explode(ex,ey,gm));
-            return true;
-        }else
-            return false;
-    }
-
-    private void die() {
+    public void die() {
         this.living = false;
     }
 }

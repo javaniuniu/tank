@@ -15,22 +15,40 @@ import java.util.List;
  * @date: 2020/9/4 7:12 PM
  */
 public class GameModel {
-    Tank myTank = new Tank(200, 400, Dir.DOWN, Group.GOOD, this);
+    private static final GameModel INSTANCE = new GameModel();
+
+    static {
+        INSTANCE.init();
+    }
+
+    Tank myTank;
+
 //    public List<Bullet> bullets = new ArrayList<>();
 //    public List<Tank> tanks = new ArrayList<>();
 //    public List<Explode> explodes = new ArrayList<>();
-
     ColliderChain chain = new ColliderChain();
 
 
     private List<GameObject> object = new ArrayList<>();
 
-    public GameModel() {
+    public static GameModel getInstance() {
+        return INSTANCE;
+    }
+
+    private GameModel() {}
+
+    public void init() {
+        myTank = new Tank(200, 400, Dir.DOWN, Group.GOOD);
         int initTankCount = Integer.parseInt((String)PropertyMgr.get("initTankCount"));
         // 初始化敌方坦克
         for (int i = 0; i < initTankCount; i++) {
-            add(new Tank(50+i*60,200,Dir.DOWN,Group.BAD,this));
+            new Tank(50+i*60,200,Dir.DOWN,Group.BAD);
         }
+        // 初始化墙
+        new Wall(150, 150, 200, 50);
+        new Wall(550, 150, 200, 50);
+        new Wall(300, 300, 50, 200);
+        new Wall(550, 300, 50, 200);
     }
 
     public void add(GameObject go) {
@@ -59,7 +77,7 @@ public class GameModel {
             for (int j = i+1; j < object.size(); j++) {
                 GameObject o1 = object.get(i);
                 GameObject o2 = object.get(j);
-            
+
                 chain.collide(o1,o2);
             }
         }
