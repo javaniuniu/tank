@@ -5,15 +5,15 @@ package com.javaniuniu.design_patterns;
  * @date: 2020/9/4 9:39 AM
  */
 public class FourDirFireStrategy implements FireStrategy {
-    //  这里不用单例 会更好
-    static final FourDirFireStrategy fourDirFireStrategy = new FourDirFireStrategy();
-
-    private FourDirFireStrategy() {
-    }
-
-    public static FourDirFireStrategy getFourDirFireStrategy() {
-        return fourDirFireStrategy;
-    }
+//    //  这里不用单例 会更好
+//    static final FourDirFireStrategy fourDirFireStrategy = new FourDirFireStrategy();
+//
+//    private FourDirFireStrategy() {
+//    }
+//
+//    public static FourDirFireStrategy getFourDirFireStrategy() {
+//        return fourDirFireStrategy;
+//    }
 
 
     @Override
@@ -23,7 +23,7 @@ public class FourDirFireStrategy implements FireStrategy {
 
         Dir[] dirs = Dir.values();
         for (Dir dir :dirs)
-            new Bullet(bx, by, dir, tank.group, tank.tf);
+            tank.tf.gf.createBullet(bx, by, dir, tank.group, tank.tf);
 
 
         if (tank.group == Group.GOOD) new Thread(() -> new Audio("audio/tank_fire.wav").play()).start();

@@ -1,5 +1,7 @@
 package com.javaniuniu.design_patterns;
 
+import com.javaniuniu.design_patterns.abstractfactory.*;
+
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -16,16 +18,17 @@ import java.util.List;
  */
 // 画板
 public class TankFrame extends Frame {
-    static final int GAME_WIDTH = Integer.parseInt((String) PropertyMgr.get("gameWidth"));
-    static final int GAME_HEIGHT = Integer.parseInt((String) PropertyMgr.get("gameHeight"));
+    public static final int GAME_WIDTH = Integer.parseInt((String) PropertyMgr.get("gameWidth"));
+    public static final int GAME_HEIGHT = Integer.parseInt((String) PropertyMgr.get("gameHeight"));
     Tank myTank = new Tank(200, 400, Dir.DOWN, Group.GOOD, this);
-    List<Bullet> bullets = new ArrayList<>();
-    List<Tank> tanks = new ArrayList<>();
-    List<Explode> explodes = new ArrayList<>();
+    public List<BaseBullet> bullets = new ArrayList<>();
+    public List<BaseTank> tanks = new ArrayList<>();
+    public List<BaseExplode> explodes = new ArrayList<>();
 //    Explode e = new Explode(100,100,this);
 
 //    private  DefauleFireStrategy dfs = DefauleFireStrategy.getDefauleFireStrategy();
 
+    public GameFactory gf = new DefaultFactory();
 
     public TankFrame() {
         setSize(GAME_WIDTH, GAME_HEIGHT);
@@ -78,14 +81,6 @@ public class TankFrame extends Frame {
         for (int i = 0; i < explodes.size(); i++) {
             explodes.get(i).paint(g);
         }
-//
-//        for (int i = 0; i < ; i++) {
-//
-//        }
-
-
-//        e.paint(g);
-
     }
 
     // 处理双缓冲，解决坦克和子弹闪烁问题
@@ -152,17 +147,7 @@ public class TankFrame extends Frame {
                     bD = false;
                     break;
                 case KeyEvent.VK_CONTROL:
-                    String goodFSName = (String) PropertyMgr.get("goodFS");
-                    FireStrategy fs = null;
-                    try {
-                        Constructor con = Class.forName(goodFSName).getDeclaredConstructor();
-                        con.setAccessible(true);
-                        fs = (FireStrategy) con.newInstance();
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                    }
-
-                    myTank.fire(fs);
+                    myTank.fire();
 
                 default:
                     break;

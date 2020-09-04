@@ -4,16 +4,16 @@ package com.javaniuniu.design_patterns;
  * @auther: javaniuniu
  * @date: 2020/9/4 9:39 AM
  */
-public class DefauleFireStrategy implements FireStrategy {
+public class DefaultFireStrategy implements FireStrategy {
 //  这里不用单例 会更好
-    static final DefauleFireStrategy defauleFireStrategy = new DefauleFireStrategy();
-
-    private DefauleFireStrategy() {
-    }
-
-    public static DefauleFireStrategy getDefauleFireStrategy() {
-        return defauleFireStrategy;
-    }
+//    static final DefauleFireStrategy defauleFireStrategy = new DefauleFireStrategy();
+//
+//    private DefauleFireStrategy() {
+//    }
+//
+//    public static DefauleFireStrategy getDefauleFireStrategy() {
+//        return defauleFireStrategy;
+//    }
 
 
     @Override

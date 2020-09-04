@@ -1,8 +1,9 @@
 package com.javaniuniu.design_patterns;
 
+import com.javaniuniu.design_patterns.abstractfactory.BaseTank;
+
 import java.awt.*;
 import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.util.Random;
 
 /**
@@ -10,31 +11,28 @@ import java.util.Random;
  * @date: 2020/9/3 7:14 PM
  */
 // 坦克类
-public class Tank {
-    int x, y; // 坦克的在画板的位置
-    Dir dir = Dir.DOWN; // 坦克默认想想移动
+public class Tank extends BaseTank {
+
+
     private static final int SPEED = Integer.parseInt((String)PropertyMgr.get("tankSpeed"));; // 坦克移动的单位
     public static final int WIDTH = ResourceMgr.goodTankU.getWidth();
     public static final int HEIGHT = ResourceMgr.goodTankU.getHeight();
 
-    TankFrame tf = null;
+    private Random random = new Random();
+    int x, y; // 坦克的在画板的位置
+    Dir dir = Dir.DOWN; // 坦克默认想想移动
+
+
+
     private boolean moving = true; // 坦克默认是否移动
     private boolean living = true; // 坦克是否存活
+    TankFrame tf = null;
 
-    private Random random = new Random();
-    Group group = Group.BAD;
-
-    Rectangle rect = new Rectangle();
-    private  FireStrategy fs = null;
+//    Rectangle rect = new Rectangle();
+    FireStrategy fs = null;
 
 
-    public Group getGroup() {
-        return group;
-    }
 
-    public void setGroup(Group group) {
-        this.group = group;
-    }
 
     public Tank(int x, int y, Dir dir, Group group, TankFrame tf) {
         this.x = x;
@@ -48,11 +46,10 @@ public class Tank {
         rect.width = WIDTH;
         rect.height = HEIGHT;
 
-
-
         if(group==Group.GOOD){
+            String goodFSName = (String) PropertyMgr.get("goodFS");
             try {
-                String goodFSName = (String) PropertyMgr.get("goodFS");
+
                 Constructor con = Class.forName(goodFSName).getDeclaredConstructor();
                 con.setAccessible(true);
                 fs = (FireStrategy) con.newInstance();
@@ -61,16 +58,115 @@ public class Tank {
             }
         }
         else{
-            try {
-                String goodFSName = (String) PropertyMgr.get("badFS");
-                Constructor con = Class.forName(goodFSName).getDeclaredConstructor();
-                con.setAccessible(true);
-                fs = (FireStrategy) con.newInstance();
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
+            fs = new DefaultFireStrategy();
+        }
+    }
+
+    public void fire() {
+//        fs.fire(this);
+        int bX = this.x + Tank.WIDTH/2 - Bullet.WIDTH/2;
+        int bY = this.y + Tank.HEIGHT/2 - Bullet.HEIGHT/2;
+
+        Dir[] dirs = Dir.values();
+        for(Dir dir : dirs) {
+            tf.gf.createBullet(bX, bY, dir, group, tf);
         }
 
+        if(group == Group.GOOD) new Thread(()->new Audio("audio/tank_fire.wav").play()).start();
+    }
+
+
+
+    public void paint(Graphics g) {
+//        Color c = g.getColor();
+//        g.setColor(Color.YELLOW);
+//        g.fillRect(x, y, 50, 50);
+//        g.setColor(c);
+
+        if (!living) tf.tanks.remove(this);
+
+        switch(dir) {
+            case LEFT:
+                g.drawImage(this.group == Group.GOOD? ResourceMgr.goodTankL : ResourceMgr.badTankL, x, y, null);
+                break;
+            case UP:
+                g.drawImage(this.group == Group.GOOD? ResourceMgr.goodTankU : ResourceMgr.badTankU, x, y, null);
+                break;
+            case RIGHT:
+                g.drawImage(this.group == Group.GOOD? ResourceMgr.goodTankR : ResourceMgr.badTankR, x, y, null);
+                break;
+            case DOWN:
+                g.drawImage(this.group == Group.GOOD? ResourceMgr.goodTankD : ResourceMgr.badTankD, x, y, null);
+                break;
+            default:
+                break;
+        }
+        move();
+    }
+
+
+
+
+    // 边界检测
+    private void boundsCheck() {
+        if (this.x < 2) x = 2;
+        if (this.y < 28) y = 28;
+        if (this.x > TankFrame.GAME_WIDTH- Tank.WIDTH -2) x = TankFrame.GAME_WIDTH - Tank.WIDTH -2;
+        if (this.y > TankFrame.GAME_HEIGHT - Tank.HEIGHT -2 ) y = TankFrame.GAME_HEIGHT -Tank.HEIGHT -2;
+
+    }
+
+    private void move() {
+        if (!moving) return;
+        switch (dir) {
+            case LEFT:
+                x -= SPEED;
+                break;
+            case UP:
+                y -= SPEED;
+                break;
+            case RIGHT:
+                x += SPEED;
+                break;
+            case DOWN:
+                y += SPEED;
+                break;
+            default:
+                break;
+        }
+
+        // 随机发子弹
+        if (this.group==Group.BAD&& random.nextInt(100)>95) this.fire();
+
+        // 随机移动
+        if (this.group == Group.BAD&& random.nextInt(100)>95) {
+            randomDir();
+        }
+
+        boundsCheck();
+
+        // update rect
+        rect.x = this.x;
+        rect.y = this.y;
+
+    }
+
+    private void randomDir() {
+        this.dir = Dir.values()[random.nextInt(4)];
+    }
+
+
+
+    public void die() {
+        this.living = false;
+    }
+
+    public Group getGroup() {
+        return group;
+    }
+
+    public void setGroup(Group group) {
+        this.group = group;
     }
 
     public Dir getDir() {
@@ -103,92 +199,5 @@ public class Tank {
 
     public void setY(int y) {
         this.y = y;
-    }
-
-    public void paint(Graphics g) {
-//        Color c = g.getColor();
-//        g.setColor(Color.YELLOW);
-//        g.fillRect(x, y, 50, 50);
-//        g.setColor(c);
-
-        if (!living) tf.tanks.remove(this);
-
-        switch(dir) {
-            case LEFT:
-                g.drawImage(this.group == Group.GOOD? ResourceMgr.goodTankL : ResourceMgr.badTankL, x, y, null);
-                break;
-            case UP:
-                g.drawImage(this.group == Group.GOOD? ResourceMgr.goodTankU : ResourceMgr.badTankU, x, y, null);
-                break;
-            case RIGHT:
-                g.drawImage(this.group == Group.GOOD? ResourceMgr.goodTankR : ResourceMgr.badTankR, x, y, null);
-                break;
-            case DOWN:
-                g.drawImage(this.group == Group.GOOD? ResourceMgr.goodTankD : ResourceMgr.badTankD, x, y, null);
-                break;
-            default:
-                break;
-        }
-        move();
-    }
-
-
-    private void move() {
-        if (!moving) return;
-        switch (dir) {
-            case LEFT:
-                x -= SPEED;
-                break;
-            case UP:
-                y -= SPEED;
-                break;
-            case RIGHT:
-                x += SPEED;
-                break;
-            case DOWN:
-                y += SPEED;
-                break;
-            default:
-                break;
-        }
-
-
-
-        // 随机发子弹
-        if (this.group==Group.BAD&& random.nextInt(100)>95) this.fire(fs);
-
-        // 随机移动
-        if (this.group == Group.BAD&& random.nextInt(100)>95) {
-            randomDir();
-        }
-
-
-        boundsCheck();
-
-        // update rect
-        rect.x = this.x;
-        rect.y = this.y;
-
-    }
-
-    // 边界检测
-    private void boundsCheck() {
-        if (this.x < 2) x = 2;
-        if (this.y < 28) y = 28;
-        if (this.x > TankFrame.GAME_WIDTH- Tank.WIDTH -2) x = TankFrame.GAME_WIDTH - Tank.WIDTH -2;
-        if (this.y > TankFrame.GAME_HEIGHT - Tank.HEIGHT -2 ) y = TankFrame.GAME_HEIGHT -Tank.HEIGHT -2;
-
-    }
-
-    private void randomDir() {
-        this.dir = Dir.values()[random.nextInt(4)];
-    }
-
-    public void fire(FireStrategy fs) {
-        fs.fire(this);
-    }
-
-    public void die() {
-        this.living = false;
     }
 }

@@ -1,12 +1,15 @@
 package com.javaniuniu.design_patterns;
 
+import com.javaniuniu.design_patterns.abstractfactory.BaseBullet;
+import com.javaniuniu.design_patterns.abstractfactory.BaseTank;
+
 import java.awt.*;
 
 /**
  * @auther: javaniuniu
  * @date: 2020/9/3 7:43 PM
  */
-public class Bullet {
+public class Bullet extends BaseBullet {
     private int x,y;
     private Dir dir;
     private static final int SPEED = Integer.parseInt((String)PropertyMgr.get("bulletSpeed"));
@@ -69,6 +72,11 @@ public class Bullet {
         move();
     }
 
+//    @Override
+//    public void collideWith(BaseTank tank) {
+//
+//    }
+
     private void move() {
         switch (dir){
             case LEFT:
@@ -96,7 +104,7 @@ public class Bullet {
     }
 
     // 碰撞测试
-    public void collideWith(Tank tank) {
+    public void collideWith(BaseTank tank) {
         if(this.group == tank.getGroup()) return;
 
 
@@ -108,7 +116,7 @@ public class Bullet {
             this.die();
             int ex = tank.getX() + Tank.WIDTH / 2 - Explode.WIDTH / 2;
             int ey = tank.getY() + Tank.HEIGHT / 2 - Explode.HEIGHT / 2;
-            tf.explodes.add(new Explode(ex,ey,tf));
+            tf.explodes.add(tf.gf.createExplode(ex,ey,tf));
         }
     }
 

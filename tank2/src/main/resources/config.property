@@ -6,4 +6,4 @@ gameWidth=1080
 gameHeight=720
 #fireStrategy
 goodFS=com.javaniuniu.design_patterns.FourDirFireStrategy
-badFS=com.javaniuniu.design_patterns.DefauleFireStrategy
+badFS=com.javaniuniu.design_patterns.DefaultFireStrategy

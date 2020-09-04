@@ -1,5 +1,7 @@
 package com.javaniuniu.design_patterns;
 
+import com.javaniuniu.design_patterns.abstractfactory.BaseExplode;
+
 import java.awt.*;
 
 /**
@@ -7,7 +9,7 @@ import java.awt.*;
  * @date: 2020/9/3 7:43 PM
  */
 // 爆炸效果
-public class Explode {
+public class Explode extends BaseExplode {
     private int x,y;
     public static final int WIDTH = ResourceMgr.explodes[0].getWidth();
     public static final int HEIGHT = ResourceMgr.explodes[0].getHeight();
