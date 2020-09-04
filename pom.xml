@@ -11,6 +11,7 @@
     <modules>
         <module>tank1</module>
         <module>tank2</module>
+        <module>tank3</module>
     </modules>
 
     <properties>
