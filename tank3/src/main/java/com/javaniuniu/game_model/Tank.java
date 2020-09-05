@@ -1,12 +1,16 @@
 package com.javaniuniu.game_model;
 
 
+import com.javaniuniu.game_model.observer.TankFireEvent;
+import com.javaniuniu.game_model.observer.TankFireHandler;
+import com.javaniuniu.game_model.observer.TankFireObserver;
 import com.javaniuniu.game_model.strategy.DefaultFireStrategy;
 import com.javaniuniu.game_model.strategy.FireStrategy;
-import com.javaniuniu.game_model.strategy.FourDirFireStrategy;
 
 import java.awt.*;
 import java.lang.reflect.Constructor;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -220,5 +224,14 @@ public class Tank extends GameObject {
     public void back() {
         this.x = this.oldX;
         this.y = this.oldY;
+    }
+
+    private List<TankFireObserver> fireObservers = Arrays.asList(new TankFireHandler());
+    public void handleFireKey() {
+        System.out.println(fireObservers.size());
+        TankFireEvent event = new TankFireEvent(this);
+        for(TankFireObserver o : fireObservers) {
+            o.actionOnFire(event);
+        }
     }
 }
