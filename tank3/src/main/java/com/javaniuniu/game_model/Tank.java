@@ -1,6 +1,7 @@
 package com.javaniuniu.game_model;
 
 
+import com.javaniuniu.game_model.strategy.DefaultFireStrategy;
 import com.javaniuniu.game_model.strategy.FireStrategy;
 import com.javaniuniu.game_model.strategy.FourDirFireStrategy;
 
@@ -22,7 +23,7 @@ public class Tank extends GameObject {
     public static final int HEIGHT = ResourceMgr.goodTankU.getHeight();
 
     private Random random = new Random();
-    public int x, y; // 坦克的在画板的位置
+//    public int x, y; // 坦克的在画板的位置
     public int oldX,oldY;// 坦克上一个位置
     public Dir dir = Dir.DOWN; // 坦克默认想想移动
 
@@ -62,7 +63,7 @@ public class Tank extends GameObject {
                 ex.printStackTrace();
             }
         } else {
-            fs = new FourDirFireStrategy();
+            fs = new DefaultFireStrategy();
         }
 
         GameModel.getInstance().add(this);
@@ -108,6 +109,16 @@ public class Tank extends GameObject {
                 break;
         }
         move();
+    }
+
+    @Override
+    public int getWidth() {
+        return WIDTH;
+    }
+
+    @Override
+    public int getHeight() {
+        return HEIGHT;
     }
 
 

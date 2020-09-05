@@ -22,38 +22,22 @@ public class ColliderChain implements Collider {
     private List<Collider> colliders = new LinkedList<>();
 
     public ColliderChain() {
-//        String collidersNames = (String) PropertyMgr.get("colliders");
-//        String[] collidersArray = collidersNames.split(",");
-//        for (String collider:collidersArray){
-//            String[] classNames = collidersNames.split(".");
-//            String className = classNames[classNames.length-1];
-////            if ()
-//
-//
-//
-//
-//            Constructor con = null;
-//            try {
-//                con = Class.forName(collider).getDeclaredConstructor();
-//                Collider   fs = (className) con.newInstance();
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
-//
-//        }
+        String[] colliderNames = ((String) PropertyMgr.get("colliders")).split(",");
 
-
-
-
-        add(new BulletTankCollider());
-        add(new TankTankCollider());
-        add(new BulletWallCollider());
-        add(new TankWallCollider());
+        try {
+            for(String name : colliderNames) {
+                Class clazz = Class.forName("com.javaniuniu.game_model.cor." + name);
+                Collider c = (Collider)(clazz.getConstructor().newInstance());
+                colliders.add(c);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
-    public void add(Collider c) {
-        colliders.add(c);
-    }
+//    public void add(Collider c) {
+//        colliders.add(c);
+//    }
 
     public boolean collide(GameObject o1, GameObject o2) {
         for (int i = 0; i < colliders.size(); i++) {

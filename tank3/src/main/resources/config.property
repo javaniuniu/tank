@@ -8,4 +8,4 @@ gameHeight=720
 goodFS=com.javaniuniu.game_model.strategy.FourDirFireStrategy
 badFS=com.javaniuniu.game_model.strategy.DefaultFireStrategy
 #colliders
-colliders=com.javaniuniu.game_model.cor.BulletTankCollider,com.javaniuniu.game_model.cor.TankTankCollider,com.javaniuniu.game_model.cor.TankWallCollider,com.javaniuniu.game_model.cor.BulletWallCollider
+colliders=BulletTankCollider,TankTankCollider,TankWallCollider,BulletWallCollider

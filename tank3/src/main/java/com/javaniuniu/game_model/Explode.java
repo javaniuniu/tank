@@ -9,7 +9,6 @@ import java.awt.*;
  */
 // 爆炸效果
 public class Explode extends GameObject {
-    private int x,y;
     public static final int WIDTH = ResourceMgr.explodes[0].getWidth();
     public static final int HEIGHT = ResourceMgr.explodes[0].getHeight();
 
@@ -38,6 +37,15 @@ public class Explode extends GameObject {
             GameModel.getInstance().remove(this);
     }
 
+    @Override
+    public int getWidth() {
+        return WIDTH;
+    }
+
+    @Override
+    public int getHeight() {
+        return HEIGHT;
+    }
 
 
 }
