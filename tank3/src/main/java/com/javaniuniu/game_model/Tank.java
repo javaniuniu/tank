@@ -228,7 +228,6 @@ public class Tank extends GameObject {
 
     private List<TankFireObserver> fireObservers = Arrays.asList(new TankFireHandler());
     public void handleFireKey() {
-        System.out.println(fireObservers.size());
         TankFireEvent event = new TankFireEvent(this);
         for(TankFireObserver o : fireObservers) {
             o.actionOnFire(event);

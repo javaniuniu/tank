@@ -1,12 +1,10 @@
 package com.javaniuniu.game_model;
 
 
-import com.javaniuniu.game_model.cor.BulletTankCollider;
-import com.javaniuniu.game_model.cor.Collider;
 import com.javaniuniu.game_model.cor.ColliderChain;
-import com.javaniuniu.game_model.cor.TankTankCollider;
 
 import java.awt.*;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,7 +21,7 @@ public class GameModel {
 
     Tank myTank;
 
-//    public List<Bullet> bullets = new ArrayList<>();
+    //    public List<Bullet> bullets = new ArrayList<>();
 //    public List<Tank> tanks = new ArrayList<>();
 //    public List<Explode> explodes = new ArrayList<>();
     ColliderChain chain = new ColliderChain();
@@ -35,14 +33,15 @@ public class GameModel {
         return INSTANCE;
     }
 
-    private GameModel() {}
+    private GameModel() {
+    }
 
     public void init() {
         myTank = new Tank(200, 400, Dir.DOWN, Group.GOOD);
-        int initTankCount = Integer.parseInt((String)PropertyMgr.get("initTankCount"));
+        int initTankCount = Integer.parseInt((String) PropertyMgr.get("initTankCount"));
         // 初始化敌方坦克
         for (int i = 0; i < initTankCount; i++) {
-            new Tank(50+i*60,200,Dir.DOWN,Group.BAD);
+            new Tank(50 + i * 60, 200, Dir.DOWN, Group.BAD);
         }
         // 初始化墙
         new Wall(150, 150, 200, 50);
@@ -74,11 +73,11 @@ public class GameModel {
         }
 
         for (int i = 0; i < object.size(); i++) {
-            for (int j = i+1; j < object.size(); j++) {
+            for (int j = i + 1; j < object.size(); j++) {
                 GameObject o1 = object.get(i);
                 GameObject o2 = object.get(j);
 
-                chain.collide(o1,o2);
+                chain.collide(o1, o2);
             }
         }
 
@@ -97,4 +96,48 @@ public class GameModel {
         return myTank;
 
     }
+
+
+    public void save() {
+        File file = new File("/Users/minp/mashibing/tank.data");
+        ObjectOutputStream oos = null;
+        try {
+            oos = new ObjectOutputStream(new FileOutputStream(file));
+            oos.writeObject(myTank);
+            oos.writeObject(object);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (null != null) {
+                try {
+                    oos.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    public void load() {
+        File file = new File("/Users/minp/mashibing/tank.data");
+        ObjectInputStream ois = null;
+        try {
+            ois = new ObjectInputStream(new FileInputStream(file));
+            myTank = (Tank) ois.readObject();
+            object = (List) ois.readObject();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (null != null) {
+                try {
+                    ois.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
 }
