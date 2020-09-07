@@ -8,5 +8,5 @@ import com.javaniuniu.game_model.GameObject;
  */
 // 碰撞器
 public interface Collider {
-    boolean collide(GameObject o1,GameObject o2); // 在责任链中，如果返回true 继续，返回false 停止
+    boolean collide(GameObject o1, GameObject o2); // 在责任链中，如果返回true 继续，返回false 停止
 }

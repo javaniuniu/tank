@@ -82,6 +82,13 @@ public class TankJoinMsg {
 
 	@Override
 	public String toString() {
-		return "TankMsg:" + x + "," + y; 
+		return "TankJoinMsg{" +
+				"x=" + x +
+				", y=" + y +
+				", dir=" + dir +
+				", moving=" + moving +
+				", group=" + group +
+				", id=" + id +
+				'}';
 	}
 }

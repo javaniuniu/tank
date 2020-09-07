@@ -5,7 +5,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.util.ArrayList;
+import java.util.*;
 import java.util.List;
 
 /**
@@ -14,20 +14,27 @@ import java.util.List;
  */
 // 画板
 public class TankFrame extends Frame {
+    public static final TankFrame INSTANCE = new TankFrame();
+
+
     static final int GAME_WIDTH = 800;
     static final int GAME_HEIGHT = 600;
-    Tank myTank = new Tank(200, 400, Dir.DOWN, Group.GOOD, this);
+    //    Tank myTank = new Tank(200, 400, Dir.DOWN, Group.GOOD, this);
+    // 设置坦克初始化位置为随机
+    Random r = new Random();
+    Tank myTank = new Tank(r.nextInt(GAME_WIDTH), r.nextInt(GAME_HEIGHT), Dir.DOWN, Group.GOOD, this);
     List<Bullet> bullets = new ArrayList<>();
-    List<Tank> tanks = new ArrayList<>();
+//    List<Tank> tanks = new ArrayList<>();
+    Map<UUID,Tank> tanks = new HashMap<>(); // 通过UUID找坦克，只要hash以下就好了，速度很快
     List<Explode> explodes = new ArrayList<>();
 //    Explode e = new Explode(100,100,this);
 
 
-    public TankFrame() {
+    private TankFrame() {
         setSize(GAME_WIDTH, GAME_HEIGHT);
         setResizable(false);
         setTitle("tank war");
-        setVisible(true);
+
 
         addKeyListener(new MykeyListener());
 
@@ -39,6 +46,9 @@ public class TankFrame extends Frame {
         });
     }
 
+    public Tank findTankByUUID(UUID id) {
+        return tanks.get(id);
+    }
 
     @Override
     public void paint(Graphics g) {
@@ -58,9 +68,11 @@ public class TankFrame extends Frame {
         }
 
         // 坦克
-        for (int i = 0; i < tanks.size(); i++) {
-            tanks.get(i).paint(g);
-        }
+        // java8 stream API
+        tanks.values().stream().forEach((e)->e.paint(g));
+//        for (int i = 0; i < tanks.size(); i++) {
+//            tanks.get(i).paint(g);
+//        }
 
         // 碰撞检测
         for (int i = 0; i < bullets.size(); i++) {
@@ -99,6 +111,14 @@ public class TankFrame extends Frame {
         gOffScreen.setColor(c);
         paint(gOffScreen);
         g.drawImage(offScreenImage, 0, 0, null);
+    }
+
+    public Tank getMainTank() {
+        return this.myTank;
+    }
+
+    public void addTank(Tank t) {
+        tanks.put(t.getId(), t);
     }
 
     class MykeyListener extends KeyAdapter {

@@ -1,5 +1,7 @@
 package com.javaniuniu.netty;
 
+import com.javaniuniu.netty.net.TankJoinMsg;
+
 import java.awt.*;
 import java.util.Random;
 import java.util.UUID;
@@ -12,12 +14,12 @@ import java.util.UUID;
 public class Tank {
     private int x, y; // 坦克的在画板的位置
     private Dir dir = Dir.DOWN; // 坦克默认想想移动
-    private static final int SPEED = 1; // 坦克移动的单位
+    private static final int SPEED = 5; // 坦克移动的单位
     public static final int WIDTH = ResourceMgr.goodTankU.getWidth();
     public static final int HEIGHT = ResourceMgr.goodTankU.getHeight();
 
     private TankFrame tf = null;
-    private boolean moving = true; // 坦克默认是否移动
+    private boolean moving = false; // 坦克默认是否移动
     private boolean living = true; // 坦克是否存活
 
     private Random random = new Random();
@@ -43,6 +45,19 @@ public class Tank {
         this.dir = dir;
         this.group = group;
         this.tf = tf;
+
+        rect.x = this.x;
+        rect.y = this.y;
+        rect.width = WIDTH;
+        rect.height = HEIGHT;
+    }
+    public Tank(TankJoinMsg msg) {
+        this.x = msg.x;
+        this.y = msg.y;
+        this.dir = msg.dir;
+        this.moving = msg.moving;
+        this.group = msg.group;
+        this.id = msg.id;
 
         rect.x = this.x;
         rect.y = this.y;
@@ -90,10 +105,10 @@ public class Tank {
         this.id = id;
     }
     public void paint(Graphics g) {
-//        Color c = g.getColor();
-//        g.setColor(Color.YELLOW);
-//        g.fillRect(x, y, 50, 50);
-//        g.setColor(c);
+        Color c = g.getColor();
+        g.setColor(Color.YELLOW);
+        g.drawString(id.toString() ,this.x, this.y-10);
+        g.setColor(c);
 
         if (!living) tf.tanks.remove(this);
 

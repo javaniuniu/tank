@@ -2,11 +2,7 @@ package com.javaniuniu.game_model.cor;
 
 import com.javaniuniu.game_model.GameObject;
 import com.javaniuniu.game_model.PropertyMgr;
-import com.javaniuniu.game_model.ResourceMgr;
-import com.javaniuniu.game_model.strategy.FireStrategy;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.util.LinkedList;
 import java.util.List;
 

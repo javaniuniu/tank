@@ -2,6 +2,8 @@ package com.javaniuniu.netty.net;
 
 import com.javaniuniu.netty.Dir;
 import com.javaniuniu.netty.Group;
+import com.javaniuniu.netty.Tank;
+import com.javaniuniu.netty.TankFrame;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
@@ -20,7 +22,9 @@ import java.util.UUID;
  * Netty默认多线程
  */
 public class TankClient {
+    public static final TankClient INSTANCE = new TankClient();
     private Channel channel = null;
+    private TankClient(){}
 
     public void connect() {
         //事件处理线程池
@@ -73,33 +77,26 @@ class ClientChannelInitializer extends ChannelInitializer<SocketChannel> {
     protected void initChannel(SocketChannel ch) throws Exception {
         ch.pipeline()
                 .addLast(new TankJoinMsgEncoder()) // 现将编码的hander 做编码处理
+                .addLast(new TankJoinMsgDecoder()) // 两个codec都要加，服务器会将数据传过来
                 .addLast(new ClientChildHandler()); // 在做相应的业务处理
     }
 }
+// codec 在编解码的时候都是传递TankJoinMsg 即可用  SimpleChannelInboundHandler<TankJoinMsg> + 范型的模式，直接使用
+class ClientChildHandler extends SimpleChannelInboundHandler<TankJoinMsg> {
 
-class ClientChildHandler extends ChannelInboundHandlerAdapter {
     @Override
-    public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-        ByteBuf buf = null;
-        try {
-            buf = (ByteBuf) msg;
-            byte[] bytes = new byte[buf.readableBytes()];
-            buf.getBytes(buf.readerIndex(), bytes);
-            String msgAccepted = new String(bytes);
-            //ClientFrame.INSTANCE.updateText(msgAccepted);
+    protected void channelRead0(ChannelHandlerContext channelHandlerContext, TankJoinMsg tankJoinMsg) throws Exception {
 
-//            System.out.println(buf);
-//            System.out.println(buf.refCnt());
-
-        } finally {
-            if (buf != null) ReferenceCountUtil.release(buf);
-//            System.out.println(buf.refCnt());
-        }
+        if(tankJoinMsg.id.equals(TankFrame.INSTANCE.getMainTank().getId()) ||  TankFrame.INSTANCE.findTankByUUID(tankJoinMsg.id)!=null) return ;
+        System.out.println(tankJoinMsg);
+        Tank t = new Tank(tankJoinMsg);//这里new了一个新的坦克，所以会重新初始化一个坦克，
+        TankFrame.INSTANCE.addTank(t);
+        channelHandlerContext.writeAndFlush(new TankJoinMsg(TankFrame.INSTANCE.getMainTank()));
+//
     }
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
-        UUID id = UUID.randomUUID();
-        ctx.writeAndFlush(new TankJoinMsg(5, 10, Dir.DOWN, true, Group.BAD, id));
+        ctx.writeAndFlush(new TankJoinMsg(TankFrame.INSTANCE.getMainTank()));
     }
 }

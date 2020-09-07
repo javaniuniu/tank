@@ -1,6 +1,5 @@
 package com.javaniuniu.game_model.cor;
 
-import com.javaniuniu.game_model.Bullet;
 import com.javaniuniu.game_model.GameObject;
 import com.javaniuniu.game_model.Tank;
 

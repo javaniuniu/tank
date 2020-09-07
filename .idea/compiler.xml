@@ -12,5 +12,11 @@
         <module name="tank3" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="tank3.main" target="1.8" />
+      <module name="tank3.test" target="1.8" />
+      <module name="tank5.main" target="1.8" />
+      <module name="tank5.test" target="1.8" />
+    </bytecodeTargetLevel>
   </component>
 </project>

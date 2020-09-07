@@ -7,7 +7,6 @@ import io.netty.channel.group.DefaultChannelGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
-import io.netty.util.ReferenceCountUtil;
 import io.netty.util.concurrent.GlobalEventExecutor;
 
 /**
@@ -49,7 +48,8 @@ class ServerChannelInitializer extends ChannelInitializer<SocketChannel> {
     protected void initChannel(SocketChannel ch) throws Exception {
         System.out.println(ch);
         ChannelPipeline pl = ch.pipeline();
-        pl.addLast(new TankJoinMsgDecoder()) // 先加自定义的handler 做解包
+        pl.addLast(new TankJoinMsgEncoder())
+                .addLast(new TankJoinMsgDecoder()) // 先加自定义的handler 做解包
                 .addLast(new ServerChildHandler()); // 在做相应的业务处理
     }
 }
@@ -62,13 +62,8 @@ class ServerChildHandler extends ChannelInboundHandlerAdapter {
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-
-        try {
-            TankJoinMsg tm = (TankJoinMsg) msg; // 使用解码 直接将msg转化成 TankMsg 所以可以直接用
-            ServerFrame.INSTANCE.updateClientMsg(tm.toString());
-        } finally {
-            ReferenceCountUtil.release(msg);
-        }
+        ServerFrame.INSTANCE.updateClientMsg(msg.toString());
+        TankServer.clients.writeAndFlush(msg);// 直接转发到客户端
 
 //        ByteBuf buf = null;
 //        try {
