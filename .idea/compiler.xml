@@ -8,6 +8,7 @@
         <outputRelativeToContentRoot value="true" />
         <module name="tank2" />
         <module name="tank1" />
+        <module name="netty" />
         <module name="tank3" />
       </profile>
     </annotationProcessing>
