@@ -2,6 +2,7 @@ package com.javaniuniu.netty;
 
 import com.javaniuniu.netty.net.TankClient;
 import com.javaniuniu.netty.net.TankStartMovingMsg;
+import com.javaniuniu.netty.net.TankStopMsg;
 
 import java.awt.*;
 import java.awt.event.KeyAdapter;
@@ -179,7 +180,12 @@ public class TankFrame extends Frame {
         }
 
         private void setMainTankDir() {
-            if (!bL && !bR && !bU && !bD) myTank.setMoving(false);
+            if (!bL && !bR && !bU && !bD) {
+                myTank.setMoving(false);
+                // 坦克停止
+                TankClient.INSTANCE.send(new TankStopMsg(getMainTank()));
+            }
+
             else {
                 myTank.setMoving(true);
                 if (bL) myTank.setDir(Dir.LEFT);

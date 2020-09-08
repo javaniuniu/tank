@@ -34,7 +34,9 @@ public class MyMsgDecoder extends ByteToMessageDecoder {
 				break;
 			case TankStartMoving:
 				msg = new TankStartMovingMsg();
-
+				break;
+			case TankStop:
+				msg = new TankStopMsg();
 				break;
 			default:
 				break;
