@@ -79,20 +79,16 @@ public class TankFrame extends Frame {
 //        }
 
         // 碰撞检测
-        for (int i = 0; i < bullets.size(); i++) {
-            for (int j = 0; j < tanks.size(); j++) {
-                bullets.get(i).collideWith(tanks.get(j));
-            }
-
+        //collision detect
+        Collection<Tank> values = tanks.values();
+        for(int i=0; i<bullets.size(); i++) {
+            for(Tank t : values )
+                bullets.get(i).collideWith(t);
         }
 
         // 爆炸
-        for (int i = 0; i < explodes.size(); i++) {
-            explodes.get(i).paint(g);
-        }
-//
-//        for (int i = 0; i < ; i++) {
-//
+//        for (int i = 0; i < explodes.size(); i++) {
+//            explodes.get(i).paint(g);
 //        }
 
 
@@ -123,6 +119,19 @@ public class TankFrame extends Frame {
 
     public void addTank(Tank t) {
         tanks.put(t.getId(), t);
+    }
+
+    public void addBullet(Bullet bullet) {
+        bullets.add(bullet);
+    }
+
+    public Bullet findBulletByUUID(UUID bulletId) {
+        for(int i=0; i<bullets.size(); i++) {
+            if(bullets.get(i).getId().equals(bulletId))
+                return bullets.get(i);
+        }
+
+        return null;
     }
 
     class MykeyListener extends KeyAdapter {
@@ -198,5 +207,4 @@ public class TankFrame extends Frame {
 
         }
     }
-
 }

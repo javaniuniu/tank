@@ -26,21 +26,24 @@ public class MyMsgDecoder extends ByteToMessageDecoder {
 		in.readBytes(bytes);
 
 		Msg msg = null;
-		switch (msgType){
-			case TankJoin:
-				msg = new TankJoinMsg();
-				msg.parse(bytes);
-				out.add(msg);
-				break;
-			case TankStartMoving:
-				msg = new TankStartMovingMsg();
-				break;
-			case TankStop:
-				msg = new TankStopMsg();
-				break;
-			default:
-				break;
-		}
+
+		//reflection
+		msg = (Msg)Class.forName("com.javaniuniu.netty.net."+msgType.toString()+"Msg").getDeclaredConstructor().newInstance();
+//		switch (msgType){
+//			case TankJoin:
+//				msg = new TankJoinMsg();
+//				msg.parse(bytes);
+//				out.add(msg);
+//				break;
+//			case TankStartMoving:
+//				msg = new TankStartMovingMsg();
+//				break;
+//			case TankStop:
+//				msg = new TankStopMsg();
+//				break;
+//			default:
+//				break;
+//		}
 		msg.parse(bytes);
 		out.add(msg);
 	}

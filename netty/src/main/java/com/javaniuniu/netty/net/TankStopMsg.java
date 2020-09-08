@@ -8,8 +8,8 @@ import java.io.*;
 import java.util.UUID;
 
 public class TankStopMsg extends Msg {
-	public int x, y;
-	public UUID id; // 128位 16个字节
+	private int x, y;
+	private UUID id; // 128位 16个字节
 
 
 	public TankStopMsg() {
@@ -93,7 +93,7 @@ public class TankStopMsg extends Msg {
 
 	@Override
 	public String toString() {
-		return "TankJoinMsg{" +
+		return "TankStopMsg{" +
 				"x=" + x +
 				", y=" + y +
 				", id=" + id +

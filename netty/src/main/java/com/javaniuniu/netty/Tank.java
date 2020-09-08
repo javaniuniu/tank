@@ -1,5 +1,7 @@
 package com.javaniuniu.netty;
 
+import com.javaniuniu.netty.net.BulletNewMsg;
+import com.javaniuniu.netty.net.TankClient;
 import com.javaniuniu.netty.net.TankJoinMsg;
 
 import java.awt.*;
@@ -27,7 +29,7 @@ public class Tank {
 
     Rectangle rect = new Rectangle();
 
-    UUID id = UUID.randomUUID();
+    private UUID id = UUID.randomUUID();
 
 
 
@@ -52,12 +54,12 @@ public class Tank {
         rect.height = HEIGHT;
     }
     public Tank(TankJoinMsg msg) {
-        this.x = msg.x;
-        this.y = msg.y;
-        this.dir = msg.dir;
-        this.moving = msg.moving;
-        this.group = msg.group;
-        this.id = msg.id;
+        this.x = msg.getX();
+        this.y = msg.getY();
+        this.dir = msg.getDir();
+        this.moving = msg.isMoving();
+        this.group = msg.getGroup();
+        this.id = msg.getId();
 
         rect.x = this.x;
         rect.y = this.y;
@@ -65,41 +67,6 @@ public class Tank {
         rect.height = HEIGHT;
     }
 
-    public Dir getDir() {
-        return dir;
-    }
-
-    public void setDir(Dir dir) {
-        this.dir = dir;
-    }
-
-    public boolean isMoving() {
-        return moving;
-    }
-
-    public void setMoving(boolean moving) {
-        this.moving = moving;
-    }
-
-    public int getX() {
-        return x;
-    }
-
-    public void setX(int x) {
-        this.x = x;
-    }
-
-    public int getY() {
-        return y;
-    }
-
-    public void setY(int y) {
-        this.y = y;
-    }
-
-    public UUID getId() {
-        return id;
-    }
 
     public void setId(UUID id) {
         this.id = id;
@@ -110,7 +77,15 @@ public class Tank {
         g.drawString(id.toString() ,this.x, this.y-10);
         g.setColor(c);
 
-        if (!living) tf.tanks.remove(this);
+        //draw a rect if dead!
+        if(!living) {
+            moving = false;
+            Color cc = g.getColor();
+            g.setColor(Color.WHITE);
+            g.drawRect(x, y, WIDTH, HEIGHT);
+            g.setColor(cc);
+            return;
+        }
 
         switch (dir) {
             case LEFT:
@@ -185,11 +160,79 @@ public class Tank {
     public void fire() {
         int bx = this.x + Tank.WIDTH / 2 - Bullet.WIDTH / 2;
         int by = this.y + Tank.HEIGHT / 2 - Bullet.HEIGHT / 2;
-        tf.bullets.add(new Bullet(bx, by, this.dir, this.group, this.tf));
+        Bullet b = new Bullet(this.id, bx, by, this.dir, this.group, this.tf);
+
+        tf.bullets.add(b);
+        TankClient.INSTANCE.send(new BulletNewMsg(b));
 
     }
 
     public void die() {
         this.living = false;
+        int eX = this.getX() + Tank.WIDTH/2 - Explode.WIDTH/2;
+        int eY = this.getY() + Tank.HEIGHT/2 - Explode.HEIGHT/2;
+        TankFrame.INSTANCE.explodes.add(new Explode(eX, eY,tf));
+    }
+
+
+    public Dir getDir() {
+        return dir;
+    }
+
+    public void setDir(Dir dir) {
+        this.dir = dir;
+    }
+
+    public boolean isMoving() {
+        return moving;
+    }
+
+    public void setMoving(boolean moving) {
+        this.moving = moving;
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public void setY(int y) {
+        this.y = y;
+    }
+
+    public UUID getId() {
+        return id;
+    }
+
+    public boolean isLiving() {
+        return living;
+    }
+
+    public void setLiving(boolean living) {
+        this.living = living;
+    }
+
+    @Override
+    public String toString() {
+        return "Tank{" +
+                "x=" + x +
+                ", y=" + y +
+                ", dir=" + dir +
+                ", tf=" + tf +
+                ", moving=" + moving +
+                ", living=" + living +
+                ", random=" + random +
+                ", group=" + group +
+                ", rect=" + rect +
+                ", id=" + id +
+                '}';
     }
 }
+

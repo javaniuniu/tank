@@ -9,9 +9,9 @@ import java.io.*;
 import java.util.UUID;
 
 public class TankStartMovingMsg extends Msg {
-	public int x, y;
-	public Dir dir;
-	public UUID id; // 128位 16个字节
+	private int x, y;
+	private Dir dir;
+	private UUID id; // 128位 16个字节
 
 
 
@@ -100,7 +100,7 @@ public class TankStartMovingMsg extends Msg {
 
 	@Override
 	public String toString() {
-		return "TankJoinMsg{" +
+		return "TankStartMovingMsg{" +
 				"x=" + x +
 				", y=" + y +
 				", dir=" + dir +

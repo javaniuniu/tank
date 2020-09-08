@@ -64,10 +64,10 @@ public class TankStartMovingMsgCodecTest {
 		TankStartMovingMsg msgR = (TankStartMovingMsg)ch.readInbound();
 
 
-		assertEquals(5, msgR.x);
-		assertEquals(10, msgR.y);
-		assertEquals(Dir.DOWN, msgR.dir);
-		assertEquals(id, msgR.id);
+		assertEquals(5, msgR.getX());
+		assertEquals(10, msgR.getY());
+		assertEquals(Dir.DOWN, msgR.getDir());
+		assertEquals(id, msgR.getId());
 		
 	}
 

@@ -17,6 +17,7 @@ public class Explode extends GameObject {
 //    private GameModel gm = null;
 
     private int step = 0; // 爆炸程度
+    private int x,y;
 
 
     public Explode(int x, int y) {
@@ -36,16 +37,5 @@ public class Explode extends GameObject {
 //            step = 0;
             GameModel.getInstance().remove(this);
     }
-
-    @Override
-    public int getWidth() {
-        return WIDTH;
-    }
-
-    @Override
-    public int getHeight() {
-        return HEIGHT;
-    }
-
 
 }

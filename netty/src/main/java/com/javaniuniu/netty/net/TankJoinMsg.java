@@ -9,11 +9,11 @@ import java.io.*;
 import java.util.UUID;
 
 public class TankJoinMsg extends Msg {
-	public int x, y;
-	public Dir dir;
-	public boolean moving; // boolean 1个字节
-	public Group group;
-	public UUID id; // 128位 16个字节
+	private int x, y;
+	private Dir dir;
+	private boolean moving; // boolean 1个字节
+	private Group group;
+	private UUID id; // 128位 16个字节
 
 	public TankJoinMsg(Tank t) {
 		this.x = t.getX();
@@ -124,4 +124,52 @@ public class TankJoinMsg extends Msg {
 		TankFrame.INSTANCE.addTank(t);
 		TankClient.INSTANCE.send(new TankJoinMsg(TankFrame.INSTANCE.getMainTank()));
     }
+
+	public int getX() {
+		return x;
+	}
+
+	public void setX(int x) {
+		this.x = x;
+	}
+
+	public int getY() {
+		return y;
+	}
+
+	public void setY(int y) {
+		this.y = y;
+	}
+
+	public Dir getDir() {
+		return dir;
+	}
+
+	public void setDir(Dir dir) {
+		this.dir = dir;
+	}
+
+	public boolean isMoving() {
+		return moving;
+	}
+
+	public void setMoving(boolean moving) {
+		this.moving = moving;
+	}
+
+	public Group getGroup() {
+		return group;
+	}
+
+	public void setGroup(Group group) {
+		this.group = group;
+	}
+
+	public UUID getId() {
+		return id;
+	}
+
+	public void setId(UUID id) {
+		this.id = id;
+	}
 }

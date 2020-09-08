@@ -26,7 +26,7 @@ public class TankServer {
         try {
             ChannelFuture f = bootstrap.group(bossGroup, workderGroup)
                     .channel(NioServerSocketChannel.class)
-
+                    .option(ChannelOption.TCP_NODELAY,true) // 禁用nagle算法，不等待，立即发送
                     .childHandler(new ServerChannelInitializer())
                     .bind(8888)
                     .sync();
