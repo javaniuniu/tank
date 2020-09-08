@@ -1,8 +1,5 @@
 package com.javaniuniu.netty.net;
 
-import com.javaniuniu.netty.Dir;
-import com.javaniuniu.netty.Group;
-import com.javaniuniu.netty.Tank;
 import com.javaniuniu.netty.TankFrame;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.buffer.ByteBuf;
@@ -11,9 +8,6 @@ import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
-import io.netty.util.ReferenceCountUtil;
-
-import java.util.UUID;
 
 
 /**
@@ -56,9 +50,9 @@ public class TankClient {
         }
     }
 
-    public void send(String msg) {
-        ByteBuf buf = Unpooled.copiedBuffer(msg.getBytes());
-        channel.writeAndFlush(buf);
+    public void send(TankJoinMsg msg) {
+//        ByteBuf buf = Unpooled.copiedBuffer(msg.getBytes());
+        channel.writeAndFlush(msg);
     }
 
     public static void main(String[] args) {
@@ -67,9 +61,9 @@ public class TankClient {
     }
 
 
-    public void closeConnect() {
-        this.send("_bye_");
-    }
+//    public void closeConnect() {
+//        this.send("_bye_");
+//    }
 }
 
 class ClientChannelInitializer extends ChannelInitializer<SocketChannel> {
@@ -86,12 +80,8 @@ class ClientChildHandler extends SimpleChannelInboundHandler<TankJoinMsg> {
 
     @Override
     protected void channelRead0(ChannelHandlerContext channelHandlerContext, TankJoinMsg tankJoinMsg) throws Exception {
+        tankJoinMsg.handle();
 
-        if(tankJoinMsg.id.equals(TankFrame.INSTANCE.getMainTank().getId()) ||  TankFrame.INSTANCE.findTankByUUID(tankJoinMsg.id)!=null) return ;
-        System.out.println(tankJoinMsg);
-        Tank t = new Tank(tankJoinMsg);//这里new了一个新的坦克，所以会重新初始化一个坦克，
-        TankFrame.INSTANCE.addTank(t);
-        channelHandlerContext.writeAndFlush(new TankJoinMsg(TankFrame.INSTANCE.getMainTank()));
 //
     }
 

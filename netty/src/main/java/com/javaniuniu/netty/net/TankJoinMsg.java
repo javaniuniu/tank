@@ -3,13 +3,12 @@ package com.javaniuniu.netty.net;
 import com.javaniuniu.netty.Dir;
 import com.javaniuniu.netty.Group;
 import com.javaniuniu.netty.Tank;
+import com.javaniuniu.netty.TankFrame;
 
-import java.io.ByteArrayOutputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.util.UUID;
 
-public class TankJoinMsg {
+public class TankJoinMsg extends Msg {
 	public int x, y;
 	public Dir dir;
 	public boolean moving; // boolean 1个字节
@@ -81,6 +80,32 @@ public class TankJoinMsg {
 	}
 
 	@Override
+	public void parse(byte[] bytes) {
+		DataInputStream dis = new DataInputStream(new ByteArrayInputStream(bytes));
+		try {
+			this.x = dis.readInt();
+			this.y = dis.readInt();
+			this.dir = Dir.values()[dis.readInt()];
+			this.moving = dis.readBoolean();
+			this.group = Group.values()[dis.readInt()];
+			this.id = new UUID(dis.readLong(),dis.readLong());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}finally {
+			try {
+				dis.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	@Override
+	public MsgType getMsgType() {
+		return MsgType.TankJoin;
+	}
+
+	@Override
 	public String toString() {
 		return "TankJoinMsg{" +
 				"x=" + x +
@@ -91,4 +116,12 @@ public class TankJoinMsg {
 				", id=" + id +
 				'}';
 	}
+
+    public void handle() {
+		if(this.id.equals(TankFrame.INSTANCE.getMainTank().getId()) ||  TankFrame.INSTANCE.findTankByUUID(this.id)!=null) return ;
+		System.out.println(this);
+		Tank t = new Tank(this);//这里new了一个新的坦克，所以会重新初始化一个坦克，
+		TankFrame.INSTANCE.addTank(t);
+		TankClient.INSTANCE.send(new TankJoinMsg(TankFrame.INSTANCE.getMainTank()));
+    }
 }
