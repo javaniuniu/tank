@@ -48,8 +48,8 @@ class ServerChannelInitializer extends ChannelInitializer<SocketChannel> {
     protected void initChannel(SocketChannel ch) throws Exception {
         System.out.println(ch);
         ChannelPipeline pl = ch.pipeline();
-        pl.addLast(new TankJoinMsgEncoder())
-                .addLast(new TankJoinMsgDecoder()) // 先加自定义的handler 做解包
+        pl.addLast(new MyMsgEncoder())
+                .addLast(new MyMsgDecoder()) // 先加自定义的handler 做解包
                 .addLast(new ServerChildHandler()); // 在做相应的业务处理
     }
 }

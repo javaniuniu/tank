@@ -7,19 +7,18 @@ import io.netty.buffer.Unpooled;
 import io.netty.channel.embedded.EmbeddedChannel;
 import org.junit.jupiter.api.Test;
 
-
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class TankJoinMsgCodecTest {
+public class TankStartMovingMsgCodecTest {
 
 	@Test
-	public void testTankJoinMsgEncoder() {
+	public void testTankStartMovingMsgEncoder() {
 		EmbeddedChannel ch = new EmbeddedChannel();
 
 		UUID id = UUID.randomUUID();
-		TankJoinMsg msg = new TankJoinMsg(5, 10, Dir.DOWN, true, Group.BAD, id);
+		TankStartMovingMsg msg = new TankStartMovingMsg( id,5, 10, Dir.DOWN);
 		ch.pipeline()
 				.addLast(new MyMsgEncoder());
 
@@ -30,52 +29,44 @@ public class TankJoinMsgCodecTest {
 		assertEquals(MsgType.TankJoin, msgType);
 
 		int length = buf.readInt();
-		assertEquals(33, length);
+		assertEquals(28, length);
 
 		int x = buf.readInt();
 		int y = buf.readInt();
 		int dirOrdinal = buf.readInt();
 		Dir dir = Dir.values()[dirOrdinal];
-		boolean moving = buf.readBoolean();
-		int groupOrdinal = buf.readInt();
-		Group g = Group.values()[groupOrdinal];
 		UUID uuid = new UUID(buf.readLong(), buf.readLong());
 
 		assertEquals(5, x);
 		assertEquals(10, y);
 		assertEquals(Dir.DOWN, dir);
-		assertEquals(true, moving);
-		assertEquals(Group.BAD, g);
 		assertEquals(id, uuid);
 		
 	}
 	
 	@Test
-	public void testTankJoinMsgDecoder() {
+	public void testTankStartMovingMsgDecoder() {
 		EmbeddedChannel ch = new EmbeddedChannel();
 
 		UUID id = UUID.randomUUID();
-		TankJoinMsg msg = new TankJoinMsg(5, 10, Dir.DOWN, true, Group.BAD, id);
+		TankStartMovingMsg msg = new TankStartMovingMsg(id,5, 10, Dir.DOWN );
 		ch.pipeline()
 				.addLast(new MyMsgDecoder());
 
 		ByteBuf buf = Unpooled.buffer();
-		buf.writeInt(MsgType.TankJoin.ordinal());
+		buf.writeInt(MsgType.TankStartMoving.ordinal());
 		byte[] bytes = msg.toBytes();
 		buf.writeInt(bytes.length);
 		buf.writeBytes(bytes);
 
 		ch.writeInbound(buf.duplicate());
 
-		TankJoinMsg msgR = (TankJoinMsg)ch.readInbound();
-
+		TankStartMovingMsg msgR = (TankStartMovingMsg)ch.readInbound();
 
 
 		assertEquals(5, msgR.x);
 		assertEquals(10, msgR.y);
 		assertEquals(Dir.DOWN, msgR.dir);
-		assertEquals(true, msgR.moving);
-		assertEquals(Group.BAD, msgR.group);
 		assertEquals(id, msgR.id);
 		
 	}

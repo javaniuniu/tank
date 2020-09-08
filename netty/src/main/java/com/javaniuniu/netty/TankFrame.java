@@ -1,5 +1,8 @@
 package com.javaniuniu.netty;
 
+import com.javaniuniu.netty.net.TankClient;
+import com.javaniuniu.netty.net.TankStartMovingMsg;
+
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -183,6 +186,8 @@ public class TankFrame extends Frame {
                 if (bR) myTank.setDir(Dir.RIGHT);
                 if (bU) myTank.setDir(Dir.UP);
                 if (bD) myTank.setDir(Dir.DOWN);
+                // 发送坦克信息
+                TankClient.INSTANCE.send(new TankStartMovingMsg(getMainTank()));
             }
 
         }

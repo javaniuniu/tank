@@ -2,8 +2,6 @@ package com.javaniuniu.netty.net;
 
 import com.javaniuniu.netty.TankFrame;
 import io.netty.bootstrap.Bootstrap;
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
@@ -50,7 +48,7 @@ public class TankClient {
         }
     }
 
-    public void send(TankJoinMsg msg) {
+    public void send(Msg msg) {
 //        ByteBuf buf = Unpooled.copiedBuffer(msg.getBytes());
         channel.writeAndFlush(msg);
     }
@@ -70,17 +68,17 @@ class ClientChannelInitializer extends ChannelInitializer<SocketChannel> {
     @Override
     protected void initChannel(SocketChannel ch) throws Exception {
         ch.pipeline()
-                .addLast(new TankJoinMsgEncoder()) // 现将编码的hander 做编码处理
-                .addLast(new TankJoinMsgDecoder()) // 两个codec都要加，服务器会将数据传过来
+                .addLast(new MyMsgEncoder()) // 现将编码的hander 做编码处理
+                .addLast(new MyMsgDecoder()) // 两个codec都要加，服务器会将数据传过来
                 .addLast(new ClientChildHandler()); // 在做相应的业务处理
     }
 }
 // codec 在编解码的时候都是传递TankJoinMsg 即可用  SimpleChannelInboundHandler<TankJoinMsg> + 范型的模式，直接使用
-class ClientChildHandler extends SimpleChannelInboundHandler<TankJoinMsg> {
+class ClientChildHandler extends SimpleChannelInboundHandler<Msg> {
 
     @Override
-    protected void channelRead0(ChannelHandlerContext channelHandlerContext, TankJoinMsg tankJoinMsg) throws Exception {
-        tankJoinMsg.handle();
+    protected void channelRead0(ChannelHandlerContext channelHandlerContext, Msg msg) throws Exception {
+        msg.handle();
 
 //
     }
